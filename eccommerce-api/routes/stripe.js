@@ -1,16 +1,18 @@
 const router=require("express").Router();
-const stripe=require("stripe")(process.env.STRIPE_KEY);
-// const KEY=process.env.STRIPE_KEY
-// const stripe=reuqire("stripe")(KEY);
-router.post("/payment",(req,res)=>{
+// const stripe=require("stripe")(process.env.STRIPE_KEY);
+const KEY=process.env.STRIPE_KEY
+const stripe=require("stripe")(KEY);
+router.post("/payment",async(req,res)=>{
     stripe.charges.create({
         source:req.body.tokenId,
         amount:req.body.amount,
-        currency:"inr",
+        currency:"usd",
     },(stripeErr,stripeRes)=>{
         if(stripeErr){
+            console.log("hello");
             res.status(500).json(stripeErr);
         }else{
+            console.log("bye");
             res.status(200).json(stripeRes);
         }
     })

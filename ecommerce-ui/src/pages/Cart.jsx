@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
 const KEY=process.env.REACT_APP_STRIPE;
 
 const Container = styled.div``;
@@ -174,25 +175,31 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart=useSelector(state=>state.cart);
+  // console.log(cart);
 
   const [stripeToken,setStripeToken]=useState(null);
   const navigate=useNavigate();
+
 const onToken=(token)=>{
   setStripeToken(token);
 }
-// console.log(stripeToken);
+console.log(stripeToken);
 useEffect(()=>{
   const makeRequest=async()=>{
     try{
       const res=await axios.post("/checkout/payment",{
         tokenId:stripeToken.id,
-        amount:cart.total*100,
+        amount:500,
       })
-      navigate("/success",{stripeData:res.data})
-    }catch{}
+
+      navigate("/success",{stripeData:res.data,products:cart})
+    }catch(error){
+      console.log(error);
+    }
   }
-  stripeToken && makeRequest()
-},[stripeToken,cart.total])
+  stripeToken && makeRequest();
+
+},[stripeToken,cart,navigate])
   return (
     <Container>
       <Announcement />
@@ -211,7 +218,7 @@ useEffect(()=>{
           <Info>
             {cart.products.map(product=>(
 
-              <Product>
+              <Product key={product._id}>
               <ProductDetail>
                 <Image src={product.img} />
                 <Details>

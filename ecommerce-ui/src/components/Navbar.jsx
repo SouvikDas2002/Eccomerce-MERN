@@ -67,6 +67,7 @@ ${mobile({fontSize:"12px",marginLeft:"10px"})}
 
 const Navbar = () => {
     const quantity=useSelector(state=>state.cart.quantity)
+    const user=useSelector(state=>state.user.currentUser)
     // console.log(cart);
     return (
         <Container>
@@ -80,8 +81,8 @@ const Navbar = () => {
                 </Left>
                 <Center><Logo>SD</Logo></Center>
                 <Right>
-                    <MenuItem>REGISTER</MenuItem>
-                    <MenuItem>SIGN IN</MenuItem>
+                    {!user?<MenuItem>REGISTER</MenuItem>:""}
+                    {!user?<MenuItem>SIGN IN</MenuItem>:""}
                     <Link to="/cart"><MenuItem>
                         <Badge badgeContent={quantity} color='primary'>
                             <ShoppingCartOutlinedIcon />
